@@ -49,7 +49,8 @@ function doPost(e) {
   try {
     const b = JSON.parse(e.postData.contents);
     const key = PropertiesService.getScriptProperties().getProperty('KEY');
-    if (!key || b.key !== key) return out_({ status: 'error', message: '通關密語錯誤' });
+   if (!key) return out_({ status: 'error', message: '尚未在指令碼屬性設定 KEY' });
+  if (b.key !== key) return out_({ status: 'error', message: '密語不符（長度：你輸入 ' + String(b.key || '').length + '、系統 ' + key.length + '）' });
 
     if (b.type === 'qa') {
       appendText_(sheet_(SHEET_QA), [b.date, b.title, b.summary || '', b.reply || '', b.reply ? '已回覆' : '追蹤中', '']);
